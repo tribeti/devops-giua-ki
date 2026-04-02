@@ -1,9 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require("cors"); // Khai báo thư viện cors
+const cors = require("cors");
 const app = express();
 
-app.use(cors()); // Bật CORS để cho phép Frontend gọi API thoải mái
+app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
@@ -17,7 +17,6 @@ mongoose
 
 const User = mongoose.model("User", new mongoose.Schema({ name: String }));
 
-// Sửa lỗi Cannot GET /
 app.get("/", (req, res) =>
   res.send("Backend đang chạy! Hãy truy cập /about hoặc /health"),
 );
