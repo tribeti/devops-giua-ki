@@ -1,13 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors"); // Khai báo thư viện cors
 const app = express();
+
+app.use(cors()); // Bật CORS để cho phép Frontend gọi API thoải mái
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 const DB_URL = process.env.DB_URL;
 const APP_NAME = process.env.APP_NAME;
 
-// Kết nối Database thực (MongoDB)
 mongoose
   .connect(DB_URL)
   .then(() => console.log("DB Connected"))
@@ -15,10 +17,13 @@ mongoose
 
 const User = mongoose.model("User", new mongoose.Schema({ name: String }));
 
-// API 1 (GET): Health check trả về status ok
+// Sửa lỗi Cannot GET /
+app.get("/", (req, res) =>
+  res.send("Backend đang chạy! Hãy truy cập /about hoặc /health"),
+);
+
 app.get("/health", (req, res) => res.json({ status: "ok" }));
 
-// API 2 (GET): Trang about hiển thị thông tin sinh viên
 app.get("/about", (req, res) => {
   res.json({
     name: "Tên của bạn",
@@ -27,7 +32,6 @@ app.get("/about", (req, res) => {
   });
 });
 
-// API 3 (POST): Lưu dữ liệu xuống DB để đáp ứng yêu cầu có API POST
 app.post("/user", async (req, res) => {
   const user = new User({ name: req.body.name || "Default User" });
   await user.save();
