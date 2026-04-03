@@ -1,18 +1,69 @@
 <!doctype html>
 <html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Trang của bạn</title>
+    </head>
     <body>
         <h1>Thông tin sinh viên</h1>
         <button onclick="getAbout()">Xem thông tin</button>
         <pre id="result"></pre>
 
+        <hr />
+
+        <h2>Danh Sách Users</h2>
+        <button onclick="getUsers()">Lấy Danh Sách Users</button>
+        <pre id="getUserResult"></pre>
+
+        <hr />
+
+        <h2>Tạo User Mới</h2>
+        <input type="text" id="userName" placeholder="Nhập tên người dùng" />
+        <button onclick="createUser()">Tạo User</button>
+        <pre id="postResult"></pre>
+
         <script>
             function getAbout() {
-                // Lấy dữ liệu từ backend và hiển thị
                 fetch("http://localhost:3000/about")
                     .then((res) => res.json())
                     .then((data) => {
                         document.getElementById("result").innerText =
                             JSON.stringify(data, null, 2);
+                    });
+            }
+
+            function getUsers() {
+                fetch("http://localhost:3000/user")
+                    .then((res) => res.json())
+                    .then((data) => {
+                        document.getElementById("getUserResult").innerText =
+                            JSON.stringify(data, null, 2);
+                    })
+                    .catch((err) => {
+                        document.getElementById("getUserResult").innerText =
+                            "Lỗi: " + err.message;
+                    });
+            }
+
+            function createUser() {
+                const userName = document.getElementById("userName").value;
+
+                fetch("http://localhost:3000/user", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ name: userName }),
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        document.getElementById("postResult").innerText =
+                            JSON.stringify(data, null, 2);
+                        document.getElementById("userName").value = "";
+                    })
+                    .catch((err) => {
+                        document.getElementById("postResult").innerText =
+                            "Lỗi: " + err.message;
                     });
             }
         </script>

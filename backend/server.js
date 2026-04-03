@@ -25,10 +25,15 @@ app.get("/health", (req, res) => res.json({ status: "ok" }));
 
 app.get("/about", (req, res) => {
   res.json({
-    name: "Tên của bạn",
-    student_id: "MSSV của bạn",
-    class: "Lớp của bạn",
+    name: "Nguyễn Đức Trí",
+    student_id: "2251220146",
+    class: "22CT1",
   });
+});
+
+app.get("/user", async (req, res) => {
+  const users = await User.find();
+  res.json({ message: "Danh sách users", users });
 });
 
 app.post("/user", async (req, res) => {
